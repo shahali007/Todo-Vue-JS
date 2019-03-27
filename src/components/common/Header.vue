@@ -1,12 +1,19 @@
 <template>
     <div id="header">
-        <a href="">{{ msg }}</a>
+        <a class="navbar-brand" href="">Todo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
 </template>
 
 <script>
+
     export default {
         name: "Header",
+        components :{
+
+        },
         data() {
             return {
                 msg: "Todo List"
@@ -16,10 +23,8 @@
 </script>
 
 <style scoped>
-    #header {
-        background: #fafafa;
-        color: #000;
-        text-align: center;
-        padding: 15px;
+    a{
+        color: #fff;
+        text-decoration: none;
     }
 </style>

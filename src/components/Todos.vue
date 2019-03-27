@@ -28,7 +28,7 @@ export default {
         padding: 0;
     }
     li{
-        padding: 10px 0;
+        padding: 10px;
         border-bottom: 1px solid #fff;
         background: #f7f7f7;
         color: black;
