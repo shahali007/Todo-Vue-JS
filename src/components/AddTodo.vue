@@ -1,6 +1,6 @@
 <template>
     <form class="form-inline ml-auto my-2 my-lg-0" v-on:submit="addTodo">
-        <input class="form-control mr-sm-2" v-model="title" type="text" placeholder="Enter">
+        <input class="form-control mr-sm-2" v-model="title" type="text" placeholder="Type todo item...">
         <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Add</button>
     </form>
 </template>
@@ -10,7 +10,8 @@
         name: "AddTodo",
         data(){
             return{
-                title : ''
+                title : '',
+                error : '',
             }
         },
         methods : {
@@ -29,7 +30,11 @@
                     console.log("New item added : " + newTodo.title)
                 }
                 else{
-                    alert("Field is required!")
+                    //alert("Field is required!"),
+                    this.error = "Field is required";
+                    this.$emit('ErrTodo', this.error);
+
+                    //console.log(this.error);
                 }
             }
         }

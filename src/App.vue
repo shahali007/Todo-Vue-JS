@@ -3,7 +3,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-lg">
             <Header/>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <AddTodo v-on:add-todo="addTodo"/>
+                <AddTodo v-on:add-todo="addTodo" v-on:ErrTodo="updateError($event)"/>
             </div>
         </nav>
 
@@ -11,13 +11,22 @@
             <div class="row">
                 <div class="col-sm-2"></div>
                 <div class="col-sm-8">
-                    <div v-if="!todos.length" class="not-found">
-                        <h3>No item found!</h3>
-                        <img src="https://mednear.com/assets/web/images/icons/empty-product.png" alt=""
-                             style="width:300px;margin:auto;">
-                    </div>
-                    <div>
+
+                    <div v-if="todos.length">
+                        <div class="btn-group w-100 mb-4">
+                            <button type="button" class="btn btn-outline-secondary" disabled>Total item : {{ todos.length }}</button>
+                            <button type="button" class="btn btn-outline-secondary" disabled>Completed : {{ CompltedTodos.length }}</button>
+                            <button type="button" class="btn btn-outline-secondary" disabled>Not Completed : {{ NotCompltedTodos.length }}</button>
+                        </div>
+
+                        <div v-if="this.error" class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>{{ error }}</strong>
+                        </div>
                         <Todos v-bind:todos="todos" v-on:delete="deleteTodo"/>
+                    </div>
+                    <div v-else class="not-found">
+                        <h3>No item found!</h3>
+                        <img src="https://mednear.com/assets/web/images/icons/empty-product.png" alt="Data Not Found!" style="width:300px;margin:auto;">
                     </div>
                 </div>
             </div>
@@ -30,6 +39,7 @@
     import Header from './components/common/Header';
     import Todos from './components/Todos';
     import AddTodo from './components/AddTodo';
+    import axios from 'axios'
 
     export default {
         name: 'app',
@@ -40,44 +50,42 @@
         },
         data() {
             return {
-                todos: [
-                    {
-                        id: 1,
-                        title: "Shahnaz Rahmatullah passes away",
-                        completed: true
-                    },
-                    {
-                        id: 2,
-                        title: "Ducsu finally gets going",
-                        completed: true
-                    },
-                    {
-                        id: 3,
-                        title: "Fire guts several shops in Lalbagh",
-                        completed: true
-                    },
-                    {
-                        id: 4,
-                        title: "Voting to 117 upazila parishads underway",
-                        completed: true
-                    },
-                    {
-                        id: 5,
-                        title: "Thailand votes in face-off between coup leader and 'democratic front'",
-                        completed: true
-                    }
-                ]
+                todos: [],
+                error : ''
             }
         },
+
         methods: {
             deleteTodo(id) {
-                // alert("Hello fazil. Tor id hocche : "+ id);
+                // alert("Hello Brother. Your ID is : "+ id);
                 this.todos = this.todos.filter(todo => todo.id !== id);
             },
             addTodo(newTodo){
                 this.todos = [...this.todos, newTodo]
+                this.error = '';
+            },
+            updateError(err){
+                this.error = err;
+                console.log(this.error);
             }
-        }
+        },
+        computed : {
+            CompltedTodos : function () {
+                return this.todos.filter(function(data) {
+                    return !data.completed;
+                });
+            },
+            NotCompltedTodos : function () {
+                return this.todos.filter(function(data) {
+                    return data.completed;
+                });
+            }
+        },
+        created(){
+            axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10')
+                .then(res => this.todos = res.data)
+                .catch(err => console.log(err))
+        },
     }
 </script>
 
@@ -96,6 +104,6 @@
     }
 
     .not-found {
-        margin-top: 150px;
+        margin-top: 100px;
     }
 </style>
