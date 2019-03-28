@@ -61,7 +61,7 @@
                 this.todos = this.todos.filter(todo => todo.id !== id);
             },
             addTodo(newTodo){
-                this.todos = [...this.todos, newTodo]
+                this.todos = [...this.todos, newTodo];
                 this.error = '';
             },
             updateError(err){
